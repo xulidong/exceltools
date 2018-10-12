@@ -1,5 +1,5 @@
 # Excel 工具
-使用 python 实现 excel 工具合计。
+使用 python 实现的 excel 工具集。
 
 ## export - Excel 导出工具
 Excel 表格导出工具，支持 json/js/lua/python，依赖第三方库 xlrd。
