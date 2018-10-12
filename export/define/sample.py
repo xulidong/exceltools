@@ -12,7 +12,7 @@ define = (
 
 config = {
     # 源文件 excel 路径
-    'source': '../excel/sample.xlsx',
+    'source': '../excel/sample.xls',
     # 导出目标文件
     'targets': (
         ('../python/sample.py', 'py'),

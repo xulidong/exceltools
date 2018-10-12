@@ -1,4 +1,12 @@
 # -*- coding: utf-8 -*-
+"""
+支持的导出的数据类型定义：
+Bool
+Int/Int64
+Float/Float64
+List/Tuple
+Dict
+"""
 
 
 class ConvertError(StandardError):
@@ -58,6 +66,27 @@ class Int(Converter):
         return 0
 
 
+class Int64(Converter):
+    def convert(self, data):
+        try:
+            if data == '':
+                d = self.get_default()
+            else:
+                if type(data) == str:
+                    d = long(float(data))
+                else:
+                    d = long(data)
+        except ValueError:
+            raise ConvertError(self.get_error_desc(data))
+        return d
+
+    def get_desc(self):
+        return 'Int64'
+
+    def get_default(self):
+        return 0
+
+
 class Float(Converter):
     def convert(self, data):
         try:
@@ -71,6 +100,24 @@ class Float(Converter):
 
     def get_desc(self):
         return 'Float'
+
+    def get_default(self):
+        return 0.0
+
+
+class Float64(Converter):
+    def convert(self, data):
+        try:
+            if data == '':
+                d = self.get_default()
+            else:
+                d = float(data)
+        except ValueError:
+            raise ConvertError(self.get_error_desc(data))
+        return d
+
+    def get_desc(self):
+        return 'Float64'
 
     def get_default(self):
         return 0.0
@@ -122,6 +169,29 @@ class List(Converter):
 
     def get_default(self):
         return []
+
+
+class Tuple(List):
+    def __init__(self, date_type=Str(), separator=";"):
+        super(List, self).__init__()
+        self.data_type = date_type
+        self.separator = separator
+
+    def convert(self, data):
+        data = str(data)
+        if data == '':
+            return self.get_default()
+        try:
+            d = [self.data_type.convert(x) for x in data.split(self.separator)]
+        except Exception:
+            raise ConvertError(self.get_error_desc(data))
+        return tuple(d)
+
+    def get_desc(self):
+        return 'Tuple'
+
+    def get_default(self):
+        return ()
 
 
 class Dict(Converter):
